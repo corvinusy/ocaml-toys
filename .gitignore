@@ -18,3 +18,8 @@ _build/
 # oasis generated files
 setup.data
 setup.log
+
+# hackerrank input files
+input*
+output*
+expected*
