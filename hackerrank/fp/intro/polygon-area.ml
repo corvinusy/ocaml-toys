@@ -1,25 +1,17 @@
-let distance p1 p2 =
+let segment_area p1 p2 =
   let dx = (fst p2) - (fst p1) in
-  let dy = (snd p2) - (snd p1) in
-  sqrt(float_of_int(dx * dx + dy * dy))
+  let ay = float_of_int ((snd p2) + (snd p1)) /. 2.0 in
+  float_of_int (dx) *. ay
 
-
-let triangle_area p1 p2 p3 =
-   let p = ((distance p1 p2) +. (distance p2 p3) +. (distance p1 p3)) /. 2.0 in
-   let a = (distance p1 p2) in
-   let b = (distance p1 p3) in
-   let c = (distance p2 p3) in
-   sqrt(p *. (p -. a) *. (p -. b) *. (p -. c))
-
-let area p =
-  let rec aux points p0 accu =
+let full_area p =
+  let rec aux points accu =
     match points with
     | [] | [_] -> accu
-    | p1::p2::tail -> aux (p2::tail) p0 (accu +. (triangle_area p0 p1 p2))
+    | p1::p2::tail -> aux (p2::tail) (accu +. (segment_area p1 p2))
   in
-    match p with
-    | [] -> 0.0
-    | hd::tl -> aux tl hd 0.0
+    (* add the first point to the list of points *)
+    aux (p @ [List.hd p]) 0.0
+
 
 let () =
   let n = int_of_string (String.trim (input_line stdin)) in
@@ -35,4 +27,4 @@ let () =
       end
   in
   let points = aux n [] in
-  Printf.printf "%.1f" (area points)
+  Printf.printf "%.1f" (full_area points)
